@@ -1,6 +1,3 @@
-# app.py
-
-import os
 import gradio as gr
 import joblib
 
@@ -9,23 +6,16 @@ model = joblib.load("diabetes_prediction_model.pkl")
 
 
 def predict_diabetes(pregnancies, glucose, bmi, age):
-    """
-    Predict diabetes using the trained Decision Tree model.
-    """
-
-    # Input must be in the same order used during training
     input_data = [[pregnancies, glucose, bmi, age]]
-
     prediction = model.predict(input_data)
 
     if prediction[0] == 1:
-        return "Prediction: High Risk of Diabetes (Positive)"
+        return "High Risk of Diabetes (Positive)"
     else:
-        return "Prediction: Low Risk of Diabetes (Negative)"
+        return "Low Risk of Diabetes (Negative)"
 
 
-# Create Gradio Interface
-interface = gr.Interface(
+demo = gr.Interface(
     fn=predict_diabetes,
     inputs=[
         gr.Number(label="Pregnancies"),
@@ -33,16 +23,9 @@ interface = gr.Interface(
         gr.Number(label="BMI"),
         gr.Number(label="Age"),
     ],
-    outputs=gr.Textbox(label="Assessment Result"),
+    outputs=gr.Textbox(label="Prediction"),
     title="Diabetes Prediction System",
-    description="Enter the medical details to predict diabetes risk using a Decision Tree model.\n Parveen :- 252152",
+    description="Enter the patient's details to predict diabetes risk."
 )
 
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 7860))
-
-    interface.launch(
-        server_name="0.0.0.0",
-        server_port=port
-    )
+demo.launch()
