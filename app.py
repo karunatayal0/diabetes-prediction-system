@@ -5,14 +5,18 @@ import joblib
 model = joblib.load("diabetes_prediction_model.pkl")
 
 def predict_diabetes(pregnancies, glucose, bmi, age):
-    input_data = [[pregnancies, glucose, bmi, age]]
-    prediction = model.predict(input_data)
+    try:
+        input_data = [[pregnancies, glucose, bmi, age]]
+        prediction = model.predict(input_data)
 
-    if prediction[0] == 1:
-        return "High Risk of Diabetes (Positive)"
-    else:
-        return "Low Risk of Diabetes (Negative)"
+        if prediction[0] == 1:
+            return "High Risk of Diabetes (Positive)"
+        else:
+            return "Low Risk of Diabetes (Negative)"
 
+    except Exception as e:
+        return str(e)
+        
 demo = gr.Interface(
     fn=predict_diabetes,
     inputs=[
